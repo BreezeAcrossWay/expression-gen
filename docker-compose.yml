@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sticker-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - backend-uploads:/app/uploads
+      - backend-outputs:/app/outputs
+    environment:
+      - FLASK_ENV=production
+      - STABILITY_API_KEY=${STABILITY_API_KEY:-your-api-key-here}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sticker-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend-uploads:
+  backend-outputs:

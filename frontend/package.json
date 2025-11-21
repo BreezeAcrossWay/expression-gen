@@ -1,0 +1,20 @@
+{
+  "name": "celebrity-sticker-generator",
+  "version": "1.0.0",
+  "description": "明星表情包生成器",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "axios": "^1.6.0",
+    "element-plus": "^2.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.0",
+    "vite": "^5.0.0"
+  }
+}
