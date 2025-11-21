@@ -171,7 +171,9 @@ export default {
     const expressions = ref([])
     const customPrompt = ref('')
     const generating = ref(false)
-    const uploadUrl = ref('/api/upload')
+    // API配置：支持环境变量配置（云端部署时使用）
+    const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+    const uploadUrl = ref(`${API_BASE_URL}/api/upload`)
 
     const beforeUpload = (file) => {
       const isImage = file.type.startsWith('image/')
@@ -214,7 +216,7 @@ export default {
 
       generating.value = true
       try {
-        const response = await axios.post('/api/generate-expressions', {
+        const response = await axios.post(`${API_BASE_URL}/api/generate-expressions`, {
           variant_id: selectedVariant.value.id,
           expressions: ['开心', '难过', '思考']
         })
@@ -239,7 +241,7 @@ export default {
 
       generating.value = true
       try {
-        const response = await axios.post('/api/generate-custom', {
+        const response = await axios.post(`${API_BASE_URL}/api/generate-custom`, {
           variant_id: selectedVariant.value.id,
           prompt: customPrompt.value
         })
@@ -258,7 +260,7 @@ export default {
 
     const deleteExpression = async (expressionId) => {
       try {
-        await axios.delete(`/api/delete-expression/${expressionId}`)
+        await axios.delete(`${API_BASE_URL}/api/delete-expression/${expressionId}`)
         expressions.value = expressions.value.filter(e => e.id !== expressionId)
         ElMessage.success('删除成功')
       } catch (error) {
@@ -267,7 +269,7 @@ export default {
     }
 
     const exportSingle = (expressionId) => {
-      window.open(`/api/export-single/${expressionId}`, '_blank')
+      window.open(`${API_BASE_URL}/api/export-single/${expressionId}`, '_blank')
       ElMessage.success('开始下载')
     }
 
@@ -279,7 +281,7 @@ export default {
 
       try {
         const expressionIds = expressions.value.map(e => e.id)
-        const response = await axios.post('/api/export-all', {
+        const response = await axios.post(`${API_BASE_URL}/api/export-all`, {
           expression_ids: expressionIds
         }, {
           responseType: 'blob'
